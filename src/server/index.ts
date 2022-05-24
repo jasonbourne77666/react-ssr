@@ -17,4 +17,4 @@ app.use(reactSsr);
 //启动服务
 app.listen(9001);
 
-console.log('server is start .9001');
+console.log('server is start http://localhost:9001');

@@ -42,10 +42,11 @@ const start = async () => {
 
       if (stats!.hasErrors()) {
         const info: any = stats!.toJson();
-        const errors = (info!.errors[0] as any).split('\n');
-        logMessage(errors[0], 'error');
-        logMessage(errors[1], 'error');
-        logMessage(errors[2], 'error');
+        console.log('clientCompiler', info.errors[0]);
+        // const errors = (info!.errors[0] as any).split('\n');
+        // logMessage(errors[0], 'error');
+        // logMessage(errors[1], 'error');
+        // logMessage(errors[2], 'error');
       }
     },
   );
@@ -69,10 +70,11 @@ const start = async () => {
 
       if (stats!.hasErrors()) {
         const info: any = stats!.toJson();
-        const errors = (info!.errors[0] as any).split('\n');
-        logMessage(errors[0], 'error');
-        logMessage(errors[1], 'error');
-        logMessage(errors[2], 'error');
+        console.log('serverCompiler', info.errors[0]);
+        // const errors = (info!.errors[0] as any).split('\n');
+        // logMessage(errors[0], 'error');
+        // logMessage(errors[1], 'error');
+        // logMessage(errors[2], 'error');
       }
     },
   );

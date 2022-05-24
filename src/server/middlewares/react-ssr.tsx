@@ -4,11 +4,18 @@
 import React from 'react';
 import { Context, Next } from 'koa';
 //引入index 组件
-import App from '../../client/App';
-import { renderToString } from 'react-dom/server';
+import App from '../../shared/App';
+import { renderToString, renderToStaticNodeStream } from 'react-dom/server';
+import { StaticRouter } from 'react-router-dom/server';
 
 export default (ctx: Context, next: Next) => {
-  const html = renderToString(<App />);
+  const { url = '' } = ctx.req;
+  const context = {};
+  const html = renderToString(
+    <StaticRouter location={url}>
+      <App />
+    </StaticRouter>,
+  );
 
   ctx.body = `<!DOCTYPE html>
   <html lang="en">
