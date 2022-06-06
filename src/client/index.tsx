@@ -3,19 +3,20 @@ import React from 'react';
 import { hydrateRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 
-import App from '../shared/App';
-// import './global.css';
+import App from '@/shared/App';
+import AppContext from '@/shared/context/AppContext';
 
-const container = document.querySelector('#root');
-hydrateRoot(
-  container!,
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
-); // createRoot(container!) if you use TypeScript
-
-// ReactDOM.hydrate(<App />, document.getElementById('root'));
-
-// if ((module as any).hot) {
-//   (module as any).hot.accept();
-// }
+function clientRender() {
+  // 数据注水
+  const context = JSON.parse((document.getElementById('ssrTextInitData') as HTMLTextAreaElement).value);
+  const container = document.querySelector('#root');
+  hydrateRoot(
+    container!,
+    <BrowserRouter>
+      <AppContext context={context}>
+        <App />
+      </AppContext>
+    </BrowserRouter>,
+  );
+}
+clientRender();

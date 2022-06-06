@@ -3,32 +3,82 @@
 //引入Index 组件
 import React from 'react';
 import { Context, Next } from 'koa';
-//引入index 组件
-import App from '../../shared/App';
-import { renderToString, renderToStaticNodeStream } from 'react-dom/server';
+import AppContext from '@/shared/context/AppContext';
+import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server';
+import { matchRoutes, RouteObject, RouteMatch } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
+//导入资源处理库
+import getAssets from '../assets';
 
-export default (ctx: Context, next: Next) => {
+//引入index 组件
+import App from '@/shared/App';
+import { routes } from '@/shared/pages/rooter';
+// import { getInitialData } from '@/shared/getInitialData';
+
+interface NewRouteObject extends RouteObject {
+  getInitialProps?: () => Promise<any>;
+}
+
+const handleInitialProps = async (routeList: RouteMatch<string>[] | null): Promise<any> => {
+  let result = {};
+  if (Array.isArray(routeList) && routeList.length) {
+    const { route } = routeList[0];
+    const getInitialProps = (route as NewRouteObject).getInitialProps;
+    if (typeof getInitialProps === 'function') {
+      result = await getInitialProps();
+    }
+  }
+
+  return result ? result : {};
+};
+
+export default async (ctx: Context, next: Next) => {
   const { url = '' } = ctx.req;
-  const context = {};
+  //得到静态资源
+  const assetsMap = getAssets();
+
+  if (url === '/favicon.ico' || url.includes('.js')) {
+    return next();
+  }
+
+  const routeList = matchRoutes(routes, url);
+
+  // 来自pages的预置数据
+  const pageData = await handleInitialProps(routeList);
+
+  const context = {
+    pageData,
+  };
+
   const html = renderToString(
     <StaticRouter location={url}>
-      <App />
+      <AppContext context={context}>
+        <App />
+      </AppContext>
     </StaticRouter>,
   );
 
-  ctx.body = `<!DOCTYPE html>
-  <html lang="en">
-  <head>
-      <meta charset="UTF-8">
-      <title>my react ssr</title>
-  </head>
-  <body>
-      <div id="root">${html}</div>
-  </body>
-  </html>
-  <script type="text/javascript"  src="client.js"></script>
-  `;
+  //得到组件的序列化数据
+  const helmet = Helmet.renderStatic();
 
+  ctx.body = `
+  <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        ${helmet.title.toString()}
+        ${helmet.meta.toString()}
+        ${assetsMap.css.join('')}
+      </head>
+      <body>
+          <div id="root">${html}</div>
+          <textarea id="ssrTextInitData" style="display:none;">
+            ${JSON.stringify(context)}
+          </textarea>
+          ${assetsMap.js.join('')}
+      </body>
+    </html>
+  `;
   return next();
 };

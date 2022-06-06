@@ -31,23 +31,18 @@ const start = async () => {
       poll: 2000, //轮训的方式检查变更 单位：秒  ,如果监听没生效，可以试试这个选项.
     },
     (error, stats) => {
-      if (!error && stats && !stats.hasErrors()) {
-        console.log(stats.toString(serverConfig.stats));
+      if (error) {
+        console.error(error);
         return;
       }
-
-      if (error) {
-        logMessage(error, 'error');
-      }
-
-      if (stats!.hasErrors()) {
-        const info: any = stats!.toJson();
-        console.log('clientCompiler', info.errors[0]);
-        // const errors = (info!.errors[0] as any).split('\n');
-        // logMessage(errors[0], 'error');
-        // logMessage(errors[1], 'error');
-        // logMessage(errors[2], 'error');
-      }
+      // 构建信息打印
+      stats &&
+        console.log(
+          stats.toString({
+            chunks: false, // 使构建过程更静默无输出
+            colors: true, // 在控制台展示颜色
+          }),
+        );
     },
   );
 
@@ -59,30 +54,25 @@ const start = async () => {
       poll: 2000, //轮训的方式检查变更 单位：秒  ,如果监听没生效，可以试试这个选项.
     },
     (error, stats) => {
-      if (!error && stats && !stats.hasErrors()) {
-        console.log(stats.toString(serverConfig.stats));
+      if (error) {
+        console.error(error);
         return;
       }
-
-      if (error) {
-        logMessage(error, 'error');
-      }
-
-      if (stats!.hasErrors()) {
-        const info: any = stats!.toJson();
-        console.log('serverCompiler', info.errors[0]);
-        // const errors = (info!.errors[0] as any).split('\n');
-        // logMessage(errors[0], 'error');
-        // logMessage(errors[1], 'error');
-        // logMessage(errors[2], 'error');
-      }
+      // 构建信息打印
+      stats &&
+        console.log(
+          stats.toString({
+            chunks: false, // 使构建过程更静默无输出
+            colors: true, // 在控制台展示颜色
+          }),
+        );
     },
   );
 
   // wait until client and server is compiled
   try {
-    await serverPromise;
     await clientPromise;
+    await serverPromise;
   } catch (error) {
     logMessage(error, 'error');
   }

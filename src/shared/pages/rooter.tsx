@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Routes, useRoutes } from 'react-router-dom';
 
 import AppLayout from '@/shared/layout/AppLayout';
-import Home from '@/shared/pages/home';
+import Home, { HomeInitialProps } from '@/shared/pages/home';
 import Login from '@/shared/pages/login';
 
 const NotFound = () => {
@@ -10,7 +10,7 @@ const NotFound = () => {
 };
 
 export const routes = [
-  { path: '/', element: <Home /> },
+  { path: '/', element: <Home />, getInitialProps: HomeInitialProps },
   {
     path: 'app',
     element: <AppLayout />,
