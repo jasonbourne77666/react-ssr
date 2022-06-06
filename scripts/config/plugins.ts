@@ -10,7 +10,7 @@ import paths from '../paths';
 import { isProduction } from '../env';
 
 export const shared = [
-  new CleanWebpackPlugin(),
+  // new CleanWebpackPlugin(),
   new MiniCssExtractPlugin({
     filename: !isProduction ? '[name].css' : 'css/[name].[contenthash:8].css',
     chunkFilename: !isProduction ? '[id].css' : 'css/[id].[contenthash:8].css',

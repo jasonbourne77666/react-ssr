@@ -1,27 +1,17 @@
-import fs from 'fs';
 import webpack from 'webpack';
-import nodemon from 'nodemon';
-// import koa from 'koa';
 import serverConfig from './config/webpack.server.prod';
 import clientConfig from './config/webpack.client.prod';
-import * as constant from './constant';
-import paths from './paths';
 import { compilerPromise, logMessage } from './utils';
 
-// 创建webpack服务
-// const app = koa();
-
+// 启动函数
 const start = async () => {
   // 同时编译客户端和服务端
-  const multiCompiler = webpack([serverConfig, clientConfig]);
+  // const multiCompiler = webpack([serverConfig, clientConfig]);
+  const clientCompiler = webpack(clientConfig);
+  const serverCompiler = webpack(serverConfig);
 
-  const clientCompiler = multiCompiler.compilers.find((compiler) => compiler.name === 'client');
-  const serverCompiler = multiCompiler.compilers.find((compiler) => compiler.name === 'server');
-
+  // 优先完成client打包，生成 manifest.json 文件
   const clientPromise = compilerPromise('client', clientCompiler);
-
-  const serverPromise = compilerPromise('server', serverCompiler);
-
   clientCompiler!.run((error, stats) => {
     if (error) {
       console.error(error);
@@ -41,13 +31,20 @@ const start = async () => {
     });
   });
 
+  try {
+    await clientPromise;
+  } catch (error) {
+    logMessage(error, 'error');
+  }
+
+  // 再完成server打包。返回html需要使用到 client 生成的 manifest.json 文件
+  const serverPromise = compilerPromise('server', serverCompiler);
   // 创建监听对象, 监听服务端改变
   serverCompiler!.run((error, stats) => {
     if (error) {
       console.error(error);
       return;
     }
-
     if (stats) {
       console.log(
         stats.toString({
@@ -62,10 +59,8 @@ const start = async () => {
     });
   });
 
-  // wait until client and server is compiled
   try {
     await serverPromise;
-    await clientPromise;
   } catch (error) {
     logMessage(error, 'error');
   }
