@@ -9,7 +9,7 @@ import { StaticRouter } from 'react-router-dom/server';
 import { matchRoutes, RouteObject, RouteMatch } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 //导入资源处理库
-import getAssets from '../assets';
+// import getAssets from '../assets';
 
 //引入index 组件
 import App from '@/shared/App';
@@ -35,8 +35,14 @@ const handleInitialProps = async (routeList: RouteMatch<string>[] | null): Promi
 
 export default async (ctx: Context, next: Next) => {
   const { url = '' } = ctx.req;
+  let assetPath = {
+    js: [],
+    css: [],
+  };
   //得到静态资源
-  const assetsMap = getAssets();
+  if (ctx.assetPath) {
+    assetPath = ctx.assetPath();
+  }
 
   if (url === '/favicon.ico' || url.includes('.js')) {
     return next();
@@ -69,14 +75,14 @@ export default async (ctx: Context, next: Next) => {
         <meta charset="UTF-8">
         ${helmet.title.toString()}
         ${helmet.meta.toString()}
-        ${assetsMap.css.join('')}
+        ${assetPath.css.join('')}
       </head>
       <body>
           <div id="root">${html}</div>
           <textarea id="ssrTextInitData" style="display:none;">
             ${JSON.stringify(context)}
           </textarea>
-          ${assetsMap.js.join('')}
+          ${assetPath.js.join('')}
       </body>
     </html>
   `;

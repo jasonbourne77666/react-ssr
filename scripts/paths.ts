@@ -36,6 +36,7 @@ export default {
   serverBuild: resolveApp('build/server'),
   clientIndex: resolveModule(resolveApp, 'src/client/index'), // Package entry path
   serverIndex: resolveModule(resolveApp, 'src/server/index'), // Package entry path
+  manifestPath: resolveApp('build/client'),
   appHtml: resolveApp('public/index.html'),
   appSrc: resolveApp('src'),
   appProxySetup: resolveModule(resolveApp, 'src/setProxy'),

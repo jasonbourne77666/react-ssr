@@ -10,7 +10,7 @@ import paths from '../paths';
 import { isProduction } from '../env';
 
 export const shared = [
-  // new CleanWebpackPlugin(),
+  new CleanWebpackPlugin(),
   new MiniCssExtractPlugin({
     filename: !isProduction ? '[name].css' : 'css/[name].[contenthash:8].css',
     chunkFilename: !isProduction ? '[id].css' : 'css/[id].[contenthash:8].css',
@@ -24,7 +24,7 @@ export const client = [
     'process.env.__BROWSER__': 'true',
   }),
   new WebpackManifestPlugin({
-    fileName: '../server/asset-manifest.json',
+    fileName: 'manifest.json',
   }),
   new ForkTsCheckerWebpackPlugin({
     typescript: {
