@@ -1,6 +1,7 @@
 import { merge } from 'webpack-merge';
 import { Configuration } from 'webpack';
 import paths from '../paths';
+import path from 'path';
 import { client as clientLoaders } from './loaders';
 import resolvers from './resolvers';
 import plugins from './plugins';
@@ -11,13 +12,13 @@ export default merge<Configuration>(
     name: 'client',
     target: 'web',
     entry: {
-      client: paths.clientIndex,
+      client: [paths.clientIndex],
     },
     output: {
       filename: '[name].js',
-      path: paths.clientBuild,
+      path: path.join(paths.clientBuild, paths.publicPath),
       chunkFilename: '[name].[chunkhash:8].chunk.js',
-      publicPath: '/',
+      publicPath: paths.publicPath,
     },
     module: {
       rules: clientLoaders,

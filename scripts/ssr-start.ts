@@ -1,5 +1,8 @@
-import webpack, { Stats } from 'webpack';
+import webpack, { Stats, Compiler } from 'webpack';
 import nodemon from 'nodemon';
+import express from 'express';
+import webpackDevMiddleware from 'webpack-dev-middleware';
+import webpackHotMiddleware from 'webpack-hot-middleware';
 import serverConfig from './config/webpack.server.dev';
 import clientConfig from './config/webpack.client.dev';
 import paths from './paths';
@@ -29,27 +32,71 @@ const watchOptions = {
   poll: 2000, //轮训的方式检查变更 单位：秒  ,如果监听没生效，可以试试这个选项.
 };
 
+const app = express();
+// 热更新服务
+const WEBPACK_PORT =
+  process.env.WEBPACK_PORT || (!isNaN(Number(process.env.PORT)) ? Number(process.env.PORT) + 1 : 9002);
+
+const DEVSERVER_HOST = process.env.DEVSERVER_HOST || 'http://localhost';
+
+const publicPath = clientConfig.output!.publicPath;
+// webpack-hot-middleware/client
+(clientConfig.entry as any).client = [
+  `webpack-hot-middleware/client?path=${DEVSERVER_HOST}:${WEBPACK_PORT}/__webpack_hmr`,
+  ...(clientConfig.entry as any).client,
+];
+
+clientConfig.output!.hotUpdateMainFilename = 'updates/[hash].hot-update.json';
+clientConfig.output!.hotUpdateChunkFilename = 'updates/[id].[hash].hot-update.js';
+
+clientConfig.output!.publicPath = [`${DEVSERVER_HOST}:${WEBPACK_PORT}`, publicPath]
+  .join('/')
+  .replace(/([^:+])\/+/g, '$1/');
+
+serverConfig.output!.publicPath = [`${DEVSERVER_HOST}:${WEBPACK_PORT}`, publicPath]
+  .join('/')
+  .replace(/([^:+])\/+/g, '$1/');
+
 // 启动函数
 const start = async () => {
+  console.log('clientConfig publicPath', clientConfig.output!.publicPath);
+  console.log('serverConfig publicPath', serverConfig.output!.publicPath);
   // 同时编译客户端和服务端
-  // const multiCompiler = webpack([serverConfig, clientConfig]);
-  const clientCompiler = webpack(clientConfig);
-  const serverCompiler = webpack(serverConfig);
+  const multiCompiler = webpack([serverConfig, clientConfig]);
+
+  const clientCompiler: Compiler = multiCompiler.compilers.find((compiler) => compiler.name === 'client')!;
+  const serverCompiler: Compiler = multiCompiler.compilers.find((compiler) => compiler.name === 'server')!;
 
   const clientPromise = compilerPromise('client', clientCompiler);
-  // 优先完成client打包，生成 manifest.json 文件
-  clientCompiler!.watch(watchOptions, watchCallback);
+  const serverPromise = compilerPromise('server', serverCompiler);
+
+  // 创建监听对象, 监听服务端改变
+  // clientCompiler!.watch(watchOptions, watchCallback);
+  serverCompiler!.watch(watchOptions, watchCallback);
+
+  app.use((_req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    return next();
+  });
+
+  // // 启动热更新服务器
+  app.use(
+    webpackDevMiddleware(clientCompiler, {
+      publicPath: clientConfig.output!.publicPath,
+      writeToDisk: true, // 生成文件
+    }),
+  );
+
+  app.use(webpackHotMiddleware(clientCompiler));
+
+  app.use('/static', express.static(paths.clientBuild));
+
+  app.listen(WEBPACK_PORT, () => {
+    console.log(`HMR server ${DEVSERVER_HOST}:${WEBPACK_PORT}`);
+  });
+
   try {
     await clientPromise;
-  } catch (error) {
-    logMessage(error, 'error');
-  }
-
-  // 再完成server打包。返回html需要使用到 client 生成的 manifest.json 文件
-  const serverPromise = compilerPromise('server', serverCompiler);
-  // 创建监听对象, 监听服务端改变
-  serverCompiler!.watch(watchOptions, watchCallback);
-  try {
     await serverPromise;
   } catch (error) {
     logMessage(error, 'error');

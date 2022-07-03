@@ -7,14 +7,14 @@ import koaStatic from 'koa-static';
 import manifestHelper from './middlewares/manifest-helper';
 
 const app = new Koa();
-const manifestPath = path.join(paths.clientBuild);
+const manifestPath = path.join(paths.clientBuild, paths.publicPath);
 // 设置可访问的静态资源，我们把 webpack 打包后的代码放到/dist/static目录下
-app.use(koaStatic('./build/static'));
+app.use(koaStatic('./build/client/static'));
 
 // 植入静态资源，res.locals
 app.use(
   manifestHelper({
-    manifestPath: `${manifestPath}/manifest.json`,
+    manifestPath: `${manifestPath}manifest.json`,
   }),
 );
 
@@ -22,6 +22,6 @@ app.use(
 app.use(reactSsr);
 
 //启动服务
-app.listen(9001);
+app.listen(process.env.PORT || 9001);
 
-console.log('server is start http://localhost:9001');
+console.log(`server is start http://localhost:${process.env.PORT || 9001}`);

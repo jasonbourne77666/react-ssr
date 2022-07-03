@@ -32,7 +32,7 @@ function resolveModule(resolveFn, filePath) {
 }
 
 export default {
-  clientBuild: resolveApp('build/static'),
+  clientBuild: resolveApp('build/client'),
   serverBuild: resolveApp('build/server'),
   clientIndex: resolveModule(resolveApp, 'src/client/index'), // Package entry path
   serverIndex: resolveModule(resolveApp, 'src/server/index'), // Package entry path

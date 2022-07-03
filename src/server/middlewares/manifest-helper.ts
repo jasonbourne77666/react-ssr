@@ -16,7 +16,7 @@ let options: OptionsType = { manifestPath: '', prependPath: '' };
  */
 function loadManifest() {
   if (manifest && options.cache) return manifest;
-  console.log(options.manifestPath);
+  // console.log(options.manifestPath);
   try {
     return JSON.parse(fs.readFileSync(options.manifestPath, 'utf8'));
   } catch (err) {
