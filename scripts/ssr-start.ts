@@ -59,8 +59,6 @@ serverConfig.output!.publicPath = [`${DEVSERVER_HOST}:${WEBPACK_PORT}`, publicPa
 
 // 启动函数
 const start = async () => {
-  console.log('clientConfig publicPath', clientConfig.output!.publicPath);
-  console.log('serverConfig publicPath', serverConfig.output!.publicPath);
   // 同时编译客户端和服务端
   const multiCompiler = webpack([serverConfig, clientConfig]);
 

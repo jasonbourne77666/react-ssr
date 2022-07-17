@@ -1,10 +1,8 @@
 import React, { useEffect, useContext, lazy } from 'react';
+import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-
-import { list } from './data';
+import { list as testList } from './data';
 import { AppContext } from '@/shared/context/AppContext';
-import { delay } from '@/shared/utils/helper';
-
 import styles from './index.module.css';
 
 function Home() {
@@ -18,6 +16,7 @@ function Home() {
         <meta name='keywords' content={tdk.keywords} />
       </Helmet>
       <h1>home</h1>
+      <Link to={'/app/login'}>login</Link>
       <ul>
         {list.map((item, index) => (
           <li
@@ -38,7 +37,7 @@ function Home() {
 export const HomeInitialProps = async function () {
   // await delay(200);
   return {
-    list,
+    testList,
     tdk: {
       title: '首页home',
       keywords: '默认关键词',
