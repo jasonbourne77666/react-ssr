@@ -10,27 +10,9 @@ const start = async () => {
   const clientCompiler: Compiler = multiCompiler.compilers.find((compiler) => compiler.name === 'client')!;
   const serverCompiler: Compiler = multiCompiler.compilers.find((compiler) => compiler.name === 'server')!;
 
-  const clientPromise = compilerPromise('client', clientCompiler);
+  // 通过webpack钩子函数，监听编译进度
   const serverPromise = compilerPromise('server', serverCompiler);
-
-  clientCompiler!.run((error, stats) => {
-    if (error) {
-      console.error(error);
-      return;
-    }
-    if (stats) {
-      console.log(
-        stats.toString({
-          chunks: false, // 使构建过程更静默无输出
-          colors: true, // 在控制台展示颜色
-        }),
-      );
-    }
-
-    clientCompiler!.close((closeErr) => {
-      console.log(closeErr);
-    });
-  });
+  const clientPromise = compilerPromise('client', clientCompiler);
 
   // 执行编译
   serverCompiler!.run((error, stats) => {
@@ -48,7 +30,26 @@ const start = async () => {
     }
 
     serverCompiler!.close((closeErr) => {
-      console.log(closeErr);
+      closeErr && console.log(closeErr);
+    });
+  });
+
+  clientCompiler!.run((error, stats) => {
+    if (error) {
+      console.error(error);
+      return;
+    }
+    if (stats) {
+      console.log(
+        stats.toString({
+          chunks: false, // 使构建过程更静默无输出
+          colors: true, // 在控制台展示颜色
+        }),
+      );
+    }
+
+    clientCompiler!.close((closeErr) => {
+      closeErr && console.log(closeErr);
     });
   });
 
