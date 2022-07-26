@@ -46,7 +46,7 @@ const getCssLoaders = (importLoaders: number, modules = {}) => [
 const cssModuleLoaderClient = {
   test: cssModuleRegex,
   use: [
-    // 'css-hot-loader',
+    'css-hot-loader',
     MiniCssExtractPlugin.loader,
     {
       loader: 'css-loader',
@@ -65,7 +65,7 @@ const cssLoaderClient = {
   test: cssRegex,
   exclude: cssModuleRegex,
   use: [
-    // 'css-hot-loader',
+    'css-hot-loader',
     MiniCssExtractPlugin.loader,
     'css-loader',
     {
@@ -147,12 +147,14 @@ const fileLoaderServer = {
 
 export const client = [
   {
+    // oneOf 仅执行此数组中的第一个匹配规则
     oneOf: [babelLoader, cssModuleLoaderClient, cssLoaderClient, urlLoaderClient, fileLoaderClient],
   },
 ];
 
 export const server = [
   {
+    // oneOf 仅执行此数组中的第一个匹配规则
     oneOf: [babelLoader, cssModuleLoaderServer, cssLoaderServer, urlLoaderServer, fileLoaderServer],
   },
 ];

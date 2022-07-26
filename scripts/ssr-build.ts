@@ -1,4 +1,4 @@
-import webpack from 'webpack';
+import webpack, { Compiler } from 'webpack';
 import serverConfig from './config/webpack.server.prod';
 import clientConfig from './config/webpack.client.prod';
 import { compilerPromise, logMessage } from './utils';
@@ -6,12 +6,13 @@ import { compilerPromise, logMessage } from './utils';
 // 启动函数
 const start = async () => {
   // 同时编译客户端和服务端
-  // const multiCompiler = webpack([serverConfig, clientConfig]);
-  const clientCompiler = webpack(clientConfig);
-  const serverCompiler = webpack(serverConfig);
+  const multiCompiler = webpack([serverConfig, clientConfig]);
+  const clientCompiler: Compiler = multiCompiler.compilers.find((compiler) => compiler.name === 'client')!;
+  const serverCompiler: Compiler = multiCompiler.compilers.find((compiler) => compiler.name === 'server')!;
 
-  // 优先完成client打包，生成 manifest.json 文件
   const clientPromise = compilerPromise('client', clientCompiler);
+  const serverPromise = compilerPromise('server', serverCompiler);
+
   clientCompiler!.run((error, stats) => {
     if (error) {
       console.error(error);
@@ -31,15 +32,7 @@ const start = async () => {
     });
   });
 
-  try {
-    await clientPromise;
-  } catch (error) {
-    logMessage(error, 'error');
-  }
-
-  // 再完成server打包。返回html需要使用到 client 生成的 manifest.json 文件
-  const serverPromise = compilerPromise('server', serverCompiler);
-  // 创建监听对象, 监听服务端改变
+  // 执行编译
   serverCompiler!.run((error, stats) => {
     if (error) {
       console.error(error);
@@ -61,6 +54,7 @@ const start = async () => {
 
   try {
     await serverPromise;
+    await clientPromise;
   } catch (error) {
     logMessage(error, 'error');
   }

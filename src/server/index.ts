@@ -3,13 +3,14 @@ import path from 'path';
 import paths from '../../scripts/paths';
 import reactSsr from './middlewares/react-ssr';
 import Koa from 'koa';
+import koaMount from 'koa-mount';
 import koaStatic from 'koa-static';
 import manifestHelper from './middlewares/manifest-helper';
 
 const app = new Koa();
 const manifestPath = path.join(paths.clientBuild, paths.publicPath);
-// 设置可访问的静态资源，我们把 webpack 打包后的代码放到/dist/static目录下
-app.use(koaStatic('./build/client/static'));
+// 设置可访问的静态资源，我们把 webpack 打包后的 client 代码放到/build/client目录下
+app.use(koaMount(paths.publicPath, koaStatic('./build/client/static')));
 
 // 植入静态资源，res.locals
 app.use(

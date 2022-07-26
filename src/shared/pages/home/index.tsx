@@ -1,13 +1,23 @@
-import React, { useEffect, useContext, lazy } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import { useAppDispatch, useAppSelector } from '@/shared/store/hooks';
+import { incrementByAmount } from '@/shared/store/user/userSlice';
 import { list as testList } from './data';
 import { AppContext } from '@/shared/context/AppContext';
+
 import styles from './index.module.css';
 
 function Home() {
   const { pageData = {} } = useContext(AppContext);
+  const dispatch = useAppDispatch();
+  const useReducer = useAppSelector((state) => state.users);
   const { list = [], tdk = {} } = pageData;
+
+  useEffect(() => {
+    dispatch(incrementByAmount(100));
+  }, []);
+
   return (
     <div>
       <Helmet>
@@ -15,7 +25,7 @@ function Home() {
         <meta name='description' content={tdk.description} />
         <meta name='keywords' content={tdk.keywords} />
       </Helmet>
-      <h1>home</h1>
+      <h1>home{useReducer.value}</h1>
       <Link to={'/app/login'}>login</Link>
       <ul>
         {list.map((item, index) => (
@@ -37,7 +47,7 @@ function Home() {
 export const HomeInitialProps = async function () {
   // await delay(200);
   return {
-    testList,
+    list: testList,
     tdk: {
       title: '首页home',
       keywords: '默认关键词',

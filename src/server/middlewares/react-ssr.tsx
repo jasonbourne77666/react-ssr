@@ -8,11 +8,11 @@ import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server';
 import { matchRoutes, RouteObject, RouteMatch } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-//导入资源处理库
-// import getAssets from '../assets';
+import { Provider } from 'react-redux';
 
 //引入index 组件
 import App from '@/shared/App';
+import getStore from '../../shared/store';
 import { routes } from '@/shared/pages/rooter';
 // import { getInitialData } from '@/shared/getInitialData';
 
@@ -53,16 +53,21 @@ export default async (ctx: Context, next: Next) => {
   // 来自pages的预置数据
   const pageData = await handleInitialProps(routeList);
 
+  const store = getStore();
+
   const context = {
     pageData,
+    // store: store.getState(),
   };
 
   const html = renderToString(
-    <StaticRouter location={url}>
-      <AppContext context={context}>
-        <App />
-      </AppContext>
-    </StaticRouter>,
+    <Provider store={store}>
+      <StaticRouter location={url}>
+        <AppContext context={context}>
+          <App />
+        </AppContext>
+      </StaticRouter>
+    </Provider>,
   );
 
   //得到组件的序列化数据
