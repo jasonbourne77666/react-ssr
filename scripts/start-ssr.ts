@@ -94,8 +94,8 @@ const start = async () => {
   });
 
   try {
-    await clientPromise;
     await serverPromise;
+    await clientPromise;
   } catch (error) {
     logMessage(error, 'error');
   }

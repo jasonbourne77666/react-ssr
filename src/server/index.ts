@@ -1,11 +1,12 @@
 //web 服务启动入口文件
 import path from 'path';
-import paths from '../../scripts/paths';
-import reactSsr from './middlewares/react-ssr';
 import Koa from 'koa';
 import koaMount from 'koa-mount';
 import koaStatic from 'koa-static';
+import paths from '../../scripts/paths';
+import reactSsr from './middlewares/react-ssr';
 import manifestHelper from './middlewares/manifest-helper';
+import addStore from './middlewares/add-store';
 
 const app = new Koa();
 const manifestPath = path.join(paths.clientBuild, paths.publicPath);
@@ -19,10 +20,12 @@ app.use(
   }),
 );
 
-//react ssr 中间件
+// redux
+app.use(addStore);
+// react ssr 中间件
 app.use(reactSsr);
 
-//启动服务
+// 启动服务
 app.listen(process.env.PORT || 9001);
 
 console.log(`server is start http://localhost:${process.env.PORT || 9001}`);

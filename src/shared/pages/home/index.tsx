@@ -15,7 +15,9 @@ function Home() {
   const { list = [], tdk = {} } = pageData;
 
   useEffect(() => {
-    dispatch(incrementByAmount(100));
+    setTimeout(() => {
+      dispatch(incrementByAmount(100));
+    }, 2000);
   }, []);
 
   return (

@@ -12,7 +12,6 @@ import { Provider } from 'react-redux';
 
 //引入index 组件
 import App from '@/shared/App';
-import getStore from '../../shared/store';
 import { routes } from '@/shared/pages/rooter';
 // import { getInitialData } from '@/shared/getInitialData';
 
@@ -53,15 +52,13 @@ export default async (ctx: Context, next: Next) => {
   // 来自pages的预置数据
   const pageData = await handleInitialProps(routeList);
 
-  const store = getStore();
-
   const context = {
     pageData,
     // store: store.getState(),
   };
 
   const html = renderToString(
-    <Provider store={store}>
+    <Provider store={ctx.reactStore}>
       <StaticRouter location={url}>
         <AppContext context={context}>
           <App />
