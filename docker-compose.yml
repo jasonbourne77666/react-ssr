@@ -1,0 +1,10 @@
+version: '3.1'
+services:
+  reactProject:
+    build:
+      context: . # 当前目录
+      dockerfile: Dockerfile # 基于 Dockerfile 构建
+    image: react-project
+    container_name: react-project # docker容器的名字
+    ports:
+      - 8090:9001
