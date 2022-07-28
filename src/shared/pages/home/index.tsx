@@ -14,10 +14,6 @@ function Home() {
   const useReducer = useAppSelector((state) => state.users);
   const { list = [], tdk = {} } = pageData;
 
-  useEffect(() => {
-    dispatch(incrementByAmount(100));
-  }, []);
-
   return (
     <div>
       <Helmet>
