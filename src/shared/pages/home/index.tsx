@@ -15,7 +15,7 @@ function Home() {
   const { list = [], tdk = {} } = pageData;
 
   useEffect(() => {
-    dispatch(incrementByAmount(10));
+    dispatch(incrementByAmount(100));
   }, []);
 
   return (
