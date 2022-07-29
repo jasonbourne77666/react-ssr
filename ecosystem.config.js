@@ -3,6 +3,7 @@ module.exports = {
     {
       name: 'app',
       script: './build/server/server.js',
+      instances: 2,
     },
   ],
 };
