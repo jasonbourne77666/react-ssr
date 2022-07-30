@@ -6,7 +6,7 @@ import { incrementByAmount } from '@/shared/store/user/userSlice';
 import { list as testList } from './data';
 import { AppContext } from '@/shared/context/AppContext';
 
-import styles from './index.module.css';
+import styles from './index.module.scss';
 
 function Home() {
   const { pageData = {} } = useContext(AppContext);
