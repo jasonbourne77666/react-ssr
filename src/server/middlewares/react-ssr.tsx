@@ -22,7 +22,7 @@ interface NewRouteObject extends RouteObject {
 const handleInitialProps = async (routeList: RouteMatch<string>[] | null): Promise<any> => {
   let result = {};
   if (Array.isArray(routeList) && routeList.length) {
-    const { route } = routeList[0];
+    const { route } = routeList[routeList.length - 1];
     const getInitialProps = (route as NewRouteObject).getInitialProps;
     if (typeof getInitialProps === 'function') {
       result = await getInitialProps();

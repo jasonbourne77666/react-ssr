@@ -1,0 +1,106 @@
+.button {
+  display: inline-flex;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: -0.1px;
+  font-weight: 600;
+  padding: 11px 31px;
+  height: 48px;
+  text-decoration: none !important;
+  color: #25282c;
+  background-color: #eceded;
+  border-width: 1px;
+  border-style: solid;
+  border-color: transparent;
+  border-radius: 2px;
+  cursor: pointer;
+  justify-content: center;
+  text-align: center;
+  letter-spacing: inherit;
+  white-space: nowrap;
+  transition: background 0.15s ease;
+
+  &:active {
+    outline: 0;
+  }
+
+  &:hover {
+    background-color: #6b6dff;
+  }
+}
+
+.button-sm {
+  padding: 5px 23px;
+  height: 36px;
+}
+
+.button-dark {
+  color: #eceded;
+  background-color: #25282c;
+
+  &:hover {
+    background-color: #2a2d32;
+  }
+}
+
+.button-primary {
+  color: #eceded;
+  background-color: #6163ff;
+
+  &:hover {
+    background-color: #6b6dff;
+  }
+}
+
+// .button-secondary {
+//   color: color(button-secondary);
+//   background-color: color-bg(button-secondary);
+//   border-color: color-border(button-secondary);
+
+//   &:hover {
+//     background-color: color-bg(button-secondary-hover);
+//     border-color: color-border(button-secondary-hover);
+//   }
+
+//   &.is-loading {
+//     &::after {
+//       border-color: color(button-secondary);
+//     }
+//   }
+// }
+
+.button-block {
+  display: flex;
+  width: 100%;
+}
+
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-right: -(16px * 0.5);
+  margin-left: -(16px * 0.5);
+  margin-top: -(16px * 0.5);
+
+  &:last-of-type {
+    margin-bottom: -(16px * 0.5);
+  }
+
+  &:not(:last-of-type) {
+    margin-bottom: (16px * 0.5);
+  }
+
+  > [class*='button'] {
+    margin: 16px * 0.5;
+  }
+}
+
+@keyframes button-loading {
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

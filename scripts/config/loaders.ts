@@ -86,8 +86,7 @@ const cssLoaderClient = {
       importLoaders: 1,
       sourceMap: isDevelopment,
       modules: {
-        mode: 'local',
-        ...cssModuleOptions,
+        mode: 'icss',
       },
     }),
   ],
@@ -96,13 +95,13 @@ const cssLoaderClient = {
 const cssModuleLoaderServer = {
   test: cssModuleRegex,
   use: [
-    MiniCssExtractPlugin.loader,
     ...getCssLoaders({
       importLoaders: 1,
       sourceMap: isDevelopment,
       modules: {
         mode: 'local',
         ...cssModuleOptions,
+        exportOnlyLocals: true,
       },
     }),
   ],
@@ -112,13 +111,12 @@ const cssLoaderServer = {
   test: cssRegex,
   exclude: cssModuleRegex,
   use: [
-    MiniCssExtractPlugin.loader,
     ...getCssLoaders({
       importLoaders: 1,
       sourceMap: isDevelopment,
       modules: {
-        mode: 'local',
-        ...cssModuleOptions,
+        mode: 'icss',
+        exportOnlyLocals: true,
       },
     }),
   ],
@@ -130,7 +128,7 @@ const scssModuleLoaderClient = {
     'css-hot-loader',
     MiniCssExtractPlugin.loader,
     ...getCssLoaders({
-      importLoaders: 1,
+      importLoaders: 3,
       sourceMap: isDevelopment,
       modules: {
         mode: 'local',
@@ -146,12 +144,12 @@ const scssLoaderClient = {
   exclude: sassModuleRegex,
   use: [
     'css-hot-loader',
+    MiniCssExtractPlugin.loader,
     ...getCssLoaders({
-      importLoaders: 1,
+      importLoaders: 3,
       sourceMap: isDevelopment,
       modules: {
-        mode: 'local',
-        ...cssModuleOptions,
+        mode: 'icss',
       },
     }),
     'sass-loader',
@@ -161,13 +159,13 @@ const scssLoaderClient = {
 const scssModuleLoaderServer = {
   test: sassModuleRegex,
   use: [
-    MiniCssExtractPlugin.loader,
     ...getCssLoaders({
-      importLoaders: 1,
+      importLoaders: 3,
       sourceMap: isDevelopment,
       modules: {
         mode: 'local',
         ...cssModuleOptions,
+        exportOnlyLocals: true,
       },
     }),
     'sass-loader',
@@ -178,13 +176,12 @@ const scssLoaderServer = {
   test: sassRegex,
   exclude: sassModuleRegex,
   use: [
-    MiniCssExtractPlugin.loader,
     ...getCssLoaders({
-      importLoaders: 1,
+      importLoaders: 3,
       sourceMap: isDevelopment,
       modules: {
-        mode: 'local',
-        ...cssModuleOptions,
+        mode: 'icss',
+        exportOnlyLocals: true,
       },
     }),
     'sass-loader',

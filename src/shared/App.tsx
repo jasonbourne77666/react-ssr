@@ -3,7 +3,8 @@ import { Helmet } from 'react-helmet';
 import Router from './pages/rooter';
 
 import './App.module.css';
-import favicon from '@/shared/assets/favicon.png';
+import './assets/scss/style.scss';
+import favicon from '@/shared/assets/images/favicon.png';
 
 const App: FC = () => {
   return (

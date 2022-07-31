@@ -94,6 +94,7 @@
     "@babel/runtime-corejs3": "^7.18.0",
     "@reduxjs/toolkit": "^1.8.3",
     "axios": "^0.27.2",
+    "classnames": "^2.3.1",
     "koa": "^2.13.4",
     "koa-mount": "^4.0.0",
     "koa-static": "^5.0.0",

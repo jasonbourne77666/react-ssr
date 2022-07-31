@@ -1,4 +1,8 @@
+@import '../../assets/scss/style.scss';
+
+$base_color: #666;
+
 .test {
-  background-color: #999;
   display: flex;
+  color: $base_color;
 }
