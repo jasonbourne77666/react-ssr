@@ -24,7 +24,7 @@ export default merge<Configuration>(
     output: {
       filename: 'server.js',
       path: paths.serverBuild,
-      publicPath: '/',
+      publicPath: paths.publicPath,
     },
     stats: {
       assets: false,

@@ -193,12 +193,13 @@ const urlLoaderClient = {
   loader: 'url-loader',
   options: {
     limit: 2048,
-    name: 'assets/[name].[hash:8].[ext]',
+    name: 'assets/[name].[contentHash:8].[ext]',
   },
 };
 
 const urlLoaderServer = {
-  ...urlLoaderClient,
+  test: /\.(png|jpe?g|gif|svg)$/,
+  loader: 'url-loader',
   options: {
     ...urlLoaderClient.options,
     emitFile: false,
