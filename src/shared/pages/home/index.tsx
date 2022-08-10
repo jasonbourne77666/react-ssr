@@ -44,7 +44,7 @@ export const HomeInitialProps = async function () {
     list: testList,
     tdk: {
       title: '首页home',
-      keywords: '关键词s',
+      keywords: '关键词',
       description: '描述',
     },
   };
