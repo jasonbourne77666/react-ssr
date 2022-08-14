@@ -3,6 +3,9 @@ import path from 'path';
 import Koa from 'koa';
 import koaMount from 'koa-mount';
 import koaStatic from 'koa-static';
+import bodyParser from 'koa-bodyparser';
+import { createProxyMiddleware } from 'http-proxy-middleware';
+import k2c from 'koa2-connect';
 import paths from '../../scripts/paths';
 import reactSsr from './middlewares/react-ssr';
 import manifestHelper from './middlewares/manifest-helper';
@@ -25,7 +28,27 @@ app.use(addStore);
 // react ssr 中间件
 app.use(reactSsr);
 
-// 启动服务
-app.listen(process.env.PORT || 9001);
+app.use(bodyParser());
 
-console.log(`server is start http://localhost:${process.env.PORT || 9001}`);
+app.use(async (ctx, next) => {
+  if (ctx.url.startsWith('/api')) {
+    ctx.respond = false; // 绕过koa内置对象response ，写入原始res对象，而不是koa处理过的response
+    await k2c(
+      createProxyMiddleware({
+        target: 'http://gk28.top:8929',
+        changeOrigin: true,
+        secure: false,
+        pathRewrite: {
+          // '/api': '',
+        },
+      }),
+    )(ctx, next);
+  }
+
+  await next();
+});
+
+// 启动服务
+app.listen(9001);
+
+console.log(`server is start http://localhost:${9001}`);

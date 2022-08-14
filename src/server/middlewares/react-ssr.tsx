@@ -34,6 +34,12 @@ const handleInitialProps = async (routeList: RouteMatch<string>[] | null): Promi
 
 export default async (ctx: Context, next: Next) => {
   const { url = '' } = ctx.req;
+
+  if (url === '/favicon.ico' || url.includes('.js') || url.includes('/api')) {
+    await next();
+    return;
+  }
+
   let assetPath = {
     js: [],
     css: [],
@@ -41,10 +47,6 @@ export default async (ctx: Context, next: Next) => {
   //得到静态资源
   if (ctx.assetPath) {
     assetPath = ctx.assetPath();
-  }
-
-  if (url === '/favicon.ico' || url.includes('.js')) {
-    return next();
   }
 
   const routeList = matchRoutes(routes, url);
@@ -88,5 +90,5 @@ export default async (ctx: Context, next: Next) => {
       </body>
     </html>
   `;
-  return next();
+  await next();
 };

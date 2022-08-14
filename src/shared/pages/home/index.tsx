@@ -1,6 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import axios from 'axios';
 import { useAppSelector } from '@/shared/store/hooks';
 import { list as testList } from './data';
 import { AppContext } from '@/shared/context/AppContext';
@@ -11,6 +12,17 @@ function Home() {
   const { pageData = {} } = useContext(AppContext);
   const useReducer = useAppSelector((state) => state.users);
   const { list = [], tdk = {} } = pageData;
+
+  useEffect(() => {
+    axios({ url: '/api/banner', method: 'GET' });
+    // .then((data) => {
+    //   const dataList = data.data.data;
+    //   setImgList(dataList);
+    // })
+    // .catch((err) => {
+    //   console.log('err', err);
+    // });
+  }, []);
 
   return (
     <div>
@@ -39,7 +51,15 @@ function Home() {
 }
 
 export const HomeInitialProps = async function () {
-  // await delay(200);
+  // let list = [];
+  // try {
+  //   const data = await axios({ url: '/api/banner', method: 'GET' });
+  //   list = data?.data?.data ?? [];
+  //   console.log('list', list.length);
+  // } catch (error) {
+  //   console.log(error);
+  // }
+
   return {
     list: testList,
     tdk: {
