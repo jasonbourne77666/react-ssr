@@ -9,7 +9,7 @@ const Logo = () => {
 
   return (
     <div className={classes}>
-      <Link style={{ display: 'block' }} to='/app/home'>
+      <Link style={{ display: 'block' }} to='/'>
         <Image src={LogoImg} alt='Logo' width={32} height={32} />
       </Link>
     </div>

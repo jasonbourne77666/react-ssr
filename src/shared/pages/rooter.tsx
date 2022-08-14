@@ -11,17 +11,17 @@ const NotFound = () => {
 
 export const routes = [
   {
-    path: '/app',
+    path: 'login',
+    element: <Login />,
+  },
+  {
+    path: '/',
     element: <AppLayout />,
     children: [
       {
-        path: 'home',
+        index: true,
         element: <Home />,
         getInitialProps: HomeInitialProps,
-      },
-      {
-        path: 'login',
-        element: <Login />,
       },
     ],
   },
@@ -29,14 +29,6 @@ export const routes = [
 ];
 
 const Router = () => {
-  const loaction = useLocation();
-  const navigate = useNavigate();
-  React.useEffect(() => {
-    if (loaction.pathname === '/') {
-      navigate('/app/home');
-    }
-  }, [loaction.pathname]);
-
   return useRoutes(routes);
 };
 
