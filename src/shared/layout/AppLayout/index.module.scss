@@ -1,4 +1,12 @@
-.section {
+.layout {
   min-height: 100vh;
-  padding-top: 80px;
+  position: relative;
+
+  .layout-bg {
+    position: absolute;
+    z-index: -1;
+  }
+}
+.section {
+  padding: 80px 0 140px;
 }

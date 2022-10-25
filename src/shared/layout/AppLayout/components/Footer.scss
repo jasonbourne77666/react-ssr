@@ -1,5 +1,9 @@
 .site-footer {
-  position: relative;
+  // position: relative;
+  position: absolute !important;
+  bottom: 0;
+  width: 100%;
+  z-index: 10 !important;
 
   &::before {
     content: '';

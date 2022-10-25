@@ -1,8 +1,9 @@
 .site-header {
-  position: absolute !important;
+  position: fixed !important;
   top: 0;
   width: 100%;
   z-index: 10 !important;
+  background-color: #151719;
 
   .brand {
     margin-right: 32px;
