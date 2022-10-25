@@ -41,7 +41,6 @@ function AppLayout() {
       const fz = 20;
       ctx.fillStyle = 'rgba(21,23,25,0.2)';
       ctx.fillRect(0, 0, clientWidth, clientHeight);
-
       ctx.font = `${fz}px serif`;
       ctx.fillStyle = getRandomColor();
 
