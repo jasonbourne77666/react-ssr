@@ -32,7 +32,7 @@ function Home() {
         <meta name='keywords' content={tdk.keywords} />
       </Helmet>
       <h1>home{useReducer.value}</h1>
-      <Link to={'/login'}>login</Link>
+      <Link to={'/login'}>login-0</Link>
       <ul>
         {list.map((item, index) => (
           <li
