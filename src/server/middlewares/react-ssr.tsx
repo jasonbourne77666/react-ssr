@@ -15,15 +15,15 @@ import App from '@/shared/App';
 import { routes } from '@/shared/pages/rooter';
 // import { getInitialData } from '@/shared/getInitialData';
 
-interface NewRouteObject extends RouteObject {
-  getInitialProps?: () => Promise<any>;
-}
+// interface NewRouteObject extends RouteObject {
+//   getInitialProps?: () => Promise<any>;
+// }
 
 const handleInitialProps = async (routeList: RouteMatch<string>[] | null): Promise<any> => {
   let result = {};
   if (Array.isArray(routeList) && routeList.length) {
     const { route } = routeList[routeList.length - 1];
-    const getInitialProps = (route as NewRouteObject).getInitialProps;
+    const getInitialProps = (route as any).getInitialProps;
     if (typeof getInitialProps === 'function') {
       result = await getInitialProps();
     }
