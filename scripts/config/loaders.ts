@@ -1,5 +1,4 @@
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import {} from 'css-loader';
 import { isDevelopment, isProduction } from '../env';
 
 const cssRegex = /\.css$/;
@@ -13,9 +12,9 @@ const babelLoader = {
   test: /\.(js|jsx|ts|tsx)$/,
   exclude: /node_modules/,
   loader: 'babel-loader',
-  options: {
-    cacheDirectory: true,
-  },
+  // options: {
+  //   cacheDirectory: true,
+  // },
 };
 
 // css-loader and postcss-loader

@@ -1,12 +1,12 @@
 import React from 'react';
-import { useRoutes, useNavigate, useLocation } from 'react-router-dom';
+import { useRoutes } from 'react-router-dom';
 
 import AppLayout from '@/shared/layout/AppLayout';
 import Home, { HomeInitialProps } from '@/shared/pages/home';
 import Login from '@/shared/pages/login';
 
 const NotFound = () => {
-  return <div>NotFound</div>;
+  return <div>NotFound1</div>;
 };
 
 export const routes = [

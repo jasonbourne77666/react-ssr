@@ -9,7 +9,7 @@ import App from '@/shared/App';
 import AppContext from '@/shared/context/AppContext';
 
 // 数据注水
-const context = JSON.parse((document.getElementById('ssrTextInitData') as HTMLTextAreaElement).value);
+const context = JSON.parse((document?.getElementById('ssrTextInitData') as HTMLTextAreaElement).value);
 // const container = document.querySelector('#root');
 
 //得到 store 对象
@@ -32,8 +32,6 @@ ReactDOM.hydrate(
   document.querySelector('#root'),
 );
 
-if (module && (module as any).hot && process.env.NODE_ENV === 'development') {
-  if ((module as any).hot) {
-    (module as any).hot.accept();
-  }
+if (module && (module as any).hot && process.env.NODE_ENV === 'development' && (module as any).hot) {
+  (module as any).hot.accept();
 }

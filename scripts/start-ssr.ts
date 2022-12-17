@@ -35,27 +35,29 @@ const watchOptions = {
 const app = express();
 // 热更新服务
 const WEBPACK_PORT =
-  process.env.WEBPACK_PORT || (!isNaN(Number(process.env.PORT)) ? Number(process.env.PORT) + 1 : 9002);
+  process.env.WEBPACK_PORT || (!Number.isNaN(Number(process.env.PORT)) ? Number(process.env.PORT) + 1 : 9002);
 
 const DEVSERVER_HOST = process.env.DEVSERVER_HOST || 'http://localhost';
 
-const publicPath = clientConfig.output!.publicPath;
+const publicPath = clientConfig.output?.publicPath;
 // webpack-hot-middleware/client
 (clientConfig.entry as any).client = [
   `webpack-hot-middleware/client?path=${DEVSERVER_HOST}:${WEBPACK_PORT}/__webpack_hmr`,
   ...(clientConfig.entry as any).client,
 ];
 
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 clientConfig.output!.hotUpdateMainFilename = 'updates/[hash].hot-update.json';
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 clientConfig.output!.hotUpdateChunkFilename = 'updates/[id].[hash].hot-update.js';
 
 clientConfig.output!.publicPath = [`${DEVSERVER_HOST}:${WEBPACK_PORT}`, publicPath]
   .join('/')
-  .replace(/([^:+])\/+/g, '$1/');
+  .replace(/([^+:])\/+/g, '$1/');
 
 serverConfig.output!.publicPath = [`${DEVSERVER_HOST}:${WEBPACK_PORT}`, publicPath]
   .join('/')
-  .replace(/([^:+])\/+/g, '$1/');
+  .replace(/([^+:])\/+/g, '$1/');
 
 // 启动函数
 const start = async () => {
@@ -70,7 +72,7 @@ const start = async () => {
 
   // 创建监听对象, 监听服务端改变
   // clientCompiler!.watch(watchOptions, watchCallback);
-  serverCompiler!.watch(watchOptions, watchCallback);
+  serverCompiler?.watch(watchOptions, watchCallback);
 
   app.use((_req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -119,12 +121,12 @@ const start = async () => {
 
   script.on('quit', () => {
     console.log('Process ended');
-    process.exit();
+    process?.exit();
   });
 
   script.on('error', () => {
     logMessage('An error occured. Exiting', 'error');
-    process.exit(1);
+    process?.exit(1);
   });
 };
 

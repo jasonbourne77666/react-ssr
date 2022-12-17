@@ -7,7 +7,9 @@ import { compilerPromise, logMessage } from './utils';
 const start = async () => {
   // 同时编译客户端和服务端
   const multiCompiler = webpack([serverConfig, clientConfig]);
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const clientCompiler: Compiler = multiCompiler.compilers.find((compiler) => compiler.name === 'client')!;
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const serverCompiler: Compiler = multiCompiler.compilers.find((compiler) => compiler.name === 'server')!;
 
   // 通过webpack钩子函数，监听编译进度
@@ -15,7 +17,7 @@ const start = async () => {
   const clientPromise = compilerPromise('client', clientCompiler);
 
   // 执行编译
-  serverCompiler!.run((error, stats) => {
+  serverCompiler?.run((error, stats) => {
     if (error) {
       console.error(error);
       return;
@@ -34,7 +36,7 @@ const start = async () => {
     });
   });
 
-  clientCompiler!.run((error, stats) => {
+  clientCompiler?.run((error, stats) => {
     if (error) {
       console.error(error);
       return;
